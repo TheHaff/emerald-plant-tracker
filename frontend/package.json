@@ -2,10 +2,8 @@
   "name": "emerald-plant-tracker-frontend",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "dependencies": {
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.5.2",
     "axios": "^1.10.0",
     "chart.js": "^4.5.0",
     "date-fns": "^4.1.0",
@@ -17,25 +15,21 @@
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.58.1",
     "react-hot-toast": "^2.4.1",
+    "react-is": "^19.1.0",
     "react-router-dom": "^7.6.3",
     "recharts": "^3.0.0",
-    "tesseract.js": "^6.0.1",
-    "web-vitals": "^5.0.3"
+    "tesseract.js": "^6.0.1"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test --watchAll=false --passWithNoTests",
-    "eject": "react-scripts eject",
-    "audit": "npm audit || true",
-    "audit-fix": "npm audit fix",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix"
   },
   "npmConfig": {
     "legacy-peer-deps": true
   },
-
   "browserslist": {
     "production": [
       ">0.2%",
@@ -48,15 +42,16 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000",
   "devDependencies": {
-    "@craco/craco": "^5.9.0",
     "@eslint/js": "^9.29.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.28.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
-    "react-scripts": "^5.1.0-next.26"
+    "vite": "^7.0.0"
   },
   "engines": {
     "node": ">=20.0.0",
@@ -65,10 +60,6 @@
   "overrides": {
     "nth-check": "^2.1.1",
     "postcss": "^8.4.31",
-    "webpack-dev-server": "^5.2.1",
-    "react-scripts": {
-      "webpack-dev-server": "^5.2.1"
-    },
     "eslint": "^9.28.0",
     "eslint-webpack-plugin": "^4.0.1",
     "eslint-plugin-flowtype": "^8.0.3",

@@ -2,12 +2,12 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-import Header from './components/Header';
-import Dashboard from './pages/Dashboard';
-import Plants from './pages/Plants';
-import PlantDetail from './pages/PlantDetail';
-import Calculator from './pages/Calculator';
-import Environment from './pages/Environment';
+import Header from './components/Header.jsx';
+import Dashboard from './pages/Dashboard.jsx';
+import Plants from './pages/Plants.jsx';
+import PlantDetail from './pages/PlantDetail.jsx';
+import Calculator from './pages/Calculator.jsx';
+import Environment from './pages/Environment.jsx';
 
 function App() {
   return (

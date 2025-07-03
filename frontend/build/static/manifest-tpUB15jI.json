@@ -1,0 +1,15 @@
+{
+  "short_name": "Emerald Plant Tracker",
+  "name": "Emerald Plant Tracker - Cannabis Cultivation",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#0f172a"
+} 

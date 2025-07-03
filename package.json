@@ -2,18 +2,18 @@
   "name": "emerald-plant-tracker",
   "version": "1.0.0",
   "description": "Cannabis plant growth tracking application",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
-    "server:dev": "cd backend && npm run dev",
-    "client:dev": "cd frontend && npm start",
-    "build": "cd frontend && npm run build",
-    "start": "cd backend && npm start",
+    "dev": "pnpm --parallel dev",
+    "build": "pnpm --recursive build",
+    "start": "pnpm --filter emerald-plant-tracker-backend start",
     "docker:build": "docker-compose build",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
-    "audit": "npm audit || true",
-    "audit-fix": "npm audit fix"
+    "audit": "pnpm --recursive audit",
+    "audit-fix": "pnpm --recursive audit --fix",
+    "clean": "pnpm --recursive clean",
+    "install:all": "pnpm install"
   },
   "devDependencies": {
     "concurrently": "^9.2.0"
@@ -26,14 +26,9 @@
   ],
   "author": "",
   "license": "MIT",
-  "dependencies": {
-    "chart.js": "^4.5.0",
-    "react-chartjs-2": "^5.3.0",
-    "tesseract.js": "^6.0.1"
-  },
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": ">=20.0.0",
+    "pnpm": ">=10.0.0"
   },
-  "packageManager": "pnpm@10.12.4+sha512.5ea8b0deed94ed68691c9bad4c955492705c5eeb8a87ef86bc62c74a26b037b08ff9570f108b2e4dbd1dd1a9186fea925e527f141c648e85af45631074680184"
+  "packageManager": "pnpm@10.12.4"
 }

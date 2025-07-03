@@ -1,21 +1,10 @@
 # Dependencies
 node_modules/
-frontend/node_modules/
-backend/node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
+.pnpm-store/
 
-# Package manager lock files (keep for production consistency)
-# Commenting out package-lock.json as it should be committed for reproducible builds
-# package-lock.json
-
-# Build output (frontend build should be committed for production Docker builds)
-/dist/
-# Commenting out frontend/build as it's needed for production Docker image
-# /frontend/build/
-/frontend/dist/
+# Build outputs
+dist/
+build/
 
 # Environment variables
 .env
@@ -23,28 +12,15 @@ lerna-debug.log*
 .env.development.local
 .env.test.local
 .env.production.local
-.env.production
-
-# Backend data and uploads
-/backend/uploads/*
-!/backend/uploads/.gitkeep
-/backend/data/*.db
-/backend/data/*.sqlite
-/backend/data/*.sqlite3
-!/backend/data/.gitkeep
-
-# Development resources
-/dev-resources/
 
 # Logs
-logs/
-*.log
-build.log
-build-output.log
-docker-build.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # Runtime data
-pids/
+pids
 *.pid
 *.seed
 *.pid.lock
@@ -54,32 +30,13 @@ coverage/
 *.lcov
 
 # nyc test coverage
-.nyc_output/
+.nyc_output
 
-# IDE and editor folders
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# OS generated files
-*.tmp
-*.temp
-
-# Docker
-.dockerignore
-docker-compose.override.yml
+# Dependency directories
+jspm_packages/
 
 # Optional npm cache directory
-.npm/
+.npm
 
 # Optional eslint cache
 .eslintcache
@@ -94,25 +51,49 @@ docker-compose.override.yml
 .yarn-integrity
 
 # dotenv environment variables file
-.env.backup
+.env
 
-# Microbundle cache
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
 
-# Optional REPL history
-.node_repl_history
+# next.js build output
+.next
+
+# nuxt.js build output
+.nuxt
+
+# vuepress build output
+.vuepress/dist
+
+# Serverless directories
+.serverless
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
 
 # Stores VSCode versions used for testing VSCode extensions
-.vscode-test/
+.vscode-test
 
-# Temporary folders
-tmp/
-temp/
+# Database
+*.db
+*.sqlite
+*.sqlite3
 
-# Shell scripts (to prevent accidental pushes to live)
-*.sh
-docker-push*.sh
-deploy*.sh
+# Uploads
+uploads/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

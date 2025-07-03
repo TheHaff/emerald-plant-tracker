@@ -58,11 +58,42 @@ A comprehensive, self-hosted web application for professional cannabis cultivati
 
 ### ⚡ **Developer Experience & Code Quality**
 
+- **PNPM Workspace**: Fast, efficient dependency management with shared packages
 - **Modern ESLint Configuration**: Enforces consistent code style and catches potential issues
 - **React Best Practices**: Follows current React patterns and performance optimizations
 - **Clean Codebase**: Zero console statements in production, no unused variables or imports
 - **Type Safety**: Proper prop validation and error handling throughout the application
 - **Maintainable Architecture**: Well-organized file structure with clear separation of concerns
+
+---
+
+## 📁 Project Structure
+
+This project uses a **pnpm workspace** for efficient dependency management:
+
+```
+emerald-plant-tracker/
+├── frontend/              # React frontend application
+│   ├── src/              # React source code
+│   ├── package.json      # Frontend dependencies
+│   └── vite.config.js    # Vite configuration
+├── backend/              # Express.js backend API
+│   ├── routes/           # API routes
+│   ├── data/             # SQLite database
+│   ├── uploads/          # File uploads
+│   └── package.json      # Backend dependencies
+├── pnpm-workspace.yaml   # Workspace configuration
+├── .npmrc               # PNPM configuration
+└── package.json         # Root package.json with workspace scripts
+```
+
+### 🚀 Workspace Commands
+
+- `pnpm dev` - Start both frontend and backend in development mode
+- `pnpm build` - Build all packages
+- `pnpm start` - Start the backend server
+- `pnpm audit` - Run security audit on all packages
+- `pnpm clean` - Remove node_modules from all packages
 
 ---
 
@@ -184,18 +215,24 @@ If you want to contribute or run the app in development mode:
 2. **Install dependencies:**
 
    ```bash
-   # Install backend dependencies
-   cd backend && npm install
+   # Install pnpm if not already installed
+   npm install -g pnpm
    
-   # Install frontend dependencies
-   cd ../frontend && npm install
-   cd ..
+   # Install all dependencies for the workspace
+   pnpm install
    ```
 
 3. **Start development servers:**
 
    ```bash
-   # Option 1: Use Docker Compose for development
+   # Start both frontend and backend in development mode
+   pnpm dev
+   
+   # Or start them individually:
+   # Frontend only: pnpm --filter emerald-plant-tracker-frontend dev
+   # Backend only: pnpm --filter emerald-plant-tracker-backend dev
+   
+   # Option 2: Use Docker Compose for development
    docker-compose -f docker-compose.dev.yml up
    
    # Option 2: Run manually

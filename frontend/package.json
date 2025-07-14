@@ -9,6 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
+    "ts:ignore": "ts-migrate migrate src --plugin strip-ts-ignore",
+    "ts:reignore": "ts-migrate migrate src --plugin ts-ignore",
     "clean": "rm -rf node_modules dist"
   },
   "dependencies": {
@@ -30,13 +32,17 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.28.0",
+    "eslint-plugin-perfectionist": "^4.15.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
+    "jiti": "^2.4.2",
+    "ts-migrate": "^0.1.35",
+    "typescript": "5.8.3",
     "vite": "^7.0.0"
   },
   "engines": {

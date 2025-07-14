@@ -19,6 +19,7 @@ const corsOptions = {
   origin: [
     // Development
     'http://localhost:3000',
+    'http://localhost:3001',
     'http://localhost:420',
     'http://127.0.0.1:420',
     // Common home network ranges on port 420

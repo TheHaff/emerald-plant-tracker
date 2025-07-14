@@ -13,10 +13,12 @@
     "audit": "pnpm --recursive audit",
     "audit-fix": "pnpm --recursive audit --fix",
     "clean": "pnpm --recursive clean",
-    "install:all": "pnpm install"
+    "install:all": "pnpm install",
+    "format": "prettier --write frontend/src"
   },
   "devDependencies": {
-    "concurrently": "^9.2.0"
+    "concurrently": "^9.2.0",
+    "prettier": "^3.6.2"
   },
   "keywords": [
     "cannabis",
@@ -30,5 +32,10 @@
     "node": ">=20.0.0",
     "pnpm": ">=10.0.0"
   },
-  "packageManager": "pnpm@10.12.4"
+  "packageManager": "pnpm@10.12.4",
+  "prettier": {
+    "singleQuote": true,
+    "tabWidth": 2,
+    "arrowParens": "avoid"
+  }
 }

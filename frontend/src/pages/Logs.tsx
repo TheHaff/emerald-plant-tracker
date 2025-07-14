@@ -1,9 +1,25 @@
+// @ts-nocheck
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, Plus, Save, X, Droplets, Thermometer, Eye, 
-  Scissors, Leaf, Bug, FlaskConical, Ruler, Camera, 
-  Activity, Home, Edit, Trash2, Search
+import {
+  ArrowLeft,
+  Plus,
+  Save,
+  X,
+  Droplets,
+  Thermometer,
+  Eye,
+  Scissors,
+  Leaf,
+  Bug,
+  FlaskConical,
+  Ruler,
+  Camera,
+  Activity,
+  Home,
+  Edit,
+  Trash2,
+  Search,
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { useForm } from 'react-hook-form';
@@ -24,14 +40,21 @@ const Logs = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { register, handleSubmit, reset, setValue, watch, formState: { errors, isSubmitting } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm();
 
   // Parse URL parameters for editing
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const editId = params.get('editId');
     const plantId = params.get('plantId');
-    
+
     if (editId && plantId) {
       setShowAddForm(true);
       // Will set editing log after logs are loaded
@@ -45,21 +68,24 @@ const Logs = () => {
     fetchData();
   }, []);
 
-  const populateForm = useCallback((log) => {
-    Object.keys(log).forEach(key => {
-      if (key === 'logged_at') {
-        setValue(key, format(parseISO(log[key]), "yyyy-MM-dd'T'HH:mm"));
-      } else {
-        setValue(key, log[key] || '');
-      }
-    });
-  }, [setValue]);
+  const populateForm = useCallback(
+    (log: any) => {
+      Object.keys(log).forEach(key => {
+        if (key === 'logged_at') {
+          setValue(key, format(parseISO(log[key]), "yyyy-MM-dd'T'HH:mm"));
+        } else {
+          setValue(key, log[key] || '');
+        }
+      });
+    },
+    [setValue],
+  );
 
   const fetchData = async () => {
     try {
       const [plantsResponse, logsResponse] = await Promise.all([
         plantsApi.getAll(),
-        logsApi.getAll()
+        logsApi.getAll(),
       ]);
       setPlants(plantsResponse.data);
       setLogs(logsResponse.data);
@@ -73,7 +99,7 @@ const Logs = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const editId = params.get('editId');
-    
+
     if (editId && logs.length > 0) {
       const logToEdit = logs.find(log => log.id === parseInt(editId));
       if (logToEdit) {
@@ -84,96 +110,106 @@ const Logs = () => {
   }, [logs, location.search, setValue, populateForm]);
 
   const logTypes = [
-    { 
-      id: 'watering', 
-      label: 'Watering', 
-      icon: <Droplets className="w-4 h-4" />, 
+    {
+      id: 'watering',
+      label: 'Watering',
+      icon: <Droplets className="w-4 h-4" />,
       color: '#3b82f6',
-      fields: ['water_amount', 'ph_level', 'ec_tds', 'notes']
+      fields: ['water_amount', 'ph_level', 'ec_tds', 'notes'],
     },
-    { 
-      id: 'feeding', 
-      label: 'Nutrient Feeding', 
-      icon: <FlaskConical className="w-4 h-4" />, 
+    {
+      id: 'feeding',
+      label: 'Nutrient Feeding',
+      icon: <FlaskConical className="w-4 h-4" />,
       color: '#10b981',
-      fields: ['nutrient_info', 'ph_level', 'ec_tds', 'water_amount', 'notes']
+      fields: ['nutrient_info', 'ph_level', 'ec_tds', 'water_amount', 'notes'],
     },
-    { 
-      id: 'environmental', 
-      label: 'Environmental Check', 
-      icon: <Thermometer className="w-4 h-4" />, 
+    {
+      id: 'environmental',
+      label: 'Environmental Check',
+      icon: <Thermometer className="w-4 h-4" />,
       color: '#f59e0b',
-      fields: ['temperature', 'humidity', 'light_intensity', 'co2_level', 'notes']
+      fields: [
+        'temperature',
+        'humidity',
+        'light_intensity',
+        'co2_level',
+        'notes',
+      ],
     },
-    { 
-      id: 'observation', 
-      label: 'Plant Observation', 
-      icon: <Eye className="w-4 h-4" />, 
+    {
+      id: 'observation',
+      label: 'Plant Observation',
+      icon: <Eye className="w-4 h-4" />,
       color: '#8b5cf6',
-      fields: ['height_cm', 'notes']
+      fields: ['height_cm', 'notes'],
     },
-    { 
-      id: 'training', 
-      label: 'Training/Pruning', 
-      icon: <Scissors className="w-4 h-4" />, 
+    {
+      id: 'training',
+      label: 'Training/Pruning',
+      icon: <Scissors className="w-4 h-4" />,
       color: '#ef4444',
-      fields: ['notes']
+      fields: ['notes'],
     },
-    { 
-      id: 'transplant', 
-      label: 'Transplant', 
-      icon: <Home className="w-4 h-4" />, 
+    {
+      id: 'transplant',
+      label: 'Transplant',
+      icon: <Home className="w-4 h-4" />,
       color: '#06b6d4',
-      fields: ['notes']
+      fields: ['notes'],
     },
-    { 
-      id: 'pest_disease', 
-      label: 'Pest/Disease', 
-      icon: <Bug className="w-4 h-4" />, 
+    {
+      id: 'pest_disease',
+      label: 'Pest/Disease',
+      icon: <Bug className="w-4 h-4" />,
       color: '#dc2626',
-      fields: ['notes']
+      fields: ['notes'],
     },
-    { 
-      id: 'deficiency', 
-      label: 'Nutrient Issue', 
-      icon: <Leaf className="w-4 h-4" />, 
+    {
+      id: 'deficiency',
+      label: 'Nutrient Issue',
+      icon: <Leaf className="w-4 h-4" />,
       color: '#ea580c',
-      fields: ['notes']
+      fields: ['notes'],
     },
-    { 
-      id: 'measurement', 
-      label: 'Growth Measurement', 
-      icon: <Ruler className="w-4 h-4" />, 
+    {
+      id: 'measurement',
+      label: 'Growth Measurement',
+      icon: <Ruler className="w-4 h-4" />,
       color: '#059669',
-      fields: ['height_cm', 'notes']
+      fields: ['height_cm', 'notes'],
     },
-    { 
-      id: 'photo', 
-      label: 'Photo Documentation', 
-      icon: <Camera className="w-4 h-4" />, 
+    {
+      id: 'photo',
+      label: 'Photo Documentation',
+      icon: <Camera className="w-4 h-4" />,
       color: '#7c3aed',
-      fields: ['notes']
-    }
+      fields: ['notes'],
+    },
   ];
 
-  const getLogTypeConfig = (type) => {
-    return logTypes.find(t => t.id === type) || { 
-      id: type, 
-      label: type, 
-      icon: <Activity className="w-4 h-4" />, 
-      color: '#64748b',
-      fields: ['notes']
-    };
+  const getLogTypeConfig = (type: any) => {
+    return (
+      logTypes.find(t => t.id === type) || {
+        id: type,
+        label: type,
+        icon: <Activity className="w-4 h-4" />,
+        color: '#64748b',
+        fields: ['notes'],
+      }
+    );
   };
 
-  const selectedTypeConfig = watch('type') ? getLogTypeConfig(watch('type')) : null;
+  const selectedTypeConfig = watch('type')
+    ? getLogTypeConfig(watch('type'))
+    : null;
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     try {
       const formData = {
         ...data,
         plant_id: parseInt(data.plant_id),
-        logged_at: data.logged_at || new Date().toISOString()
+        logged_at: data.logged_at || new Date().toISOString(),
       };
 
       if (editingLog) {
@@ -198,7 +234,7 @@ const Logs = () => {
     navigate('/logs');
   };
 
-  const handleDelete = async (logId) => {
+  const handleDelete = async (logId: any) => {
     if (window.confirm('Are you sure you want to delete this log?')) {
       try {
         await logsApi.delete(logId);
@@ -211,43 +247,55 @@ const Logs = () => {
   };
 
   const filteredLogs = logs.filter(log => {
-    const matchesPlant = !selectedPlant || log.plant_id === parseInt(selectedPlant);
+    const matchesPlant =
+      !selectedPlant || log.plant_id === parseInt(selectedPlant);
     const matchesType = !selectedType || log.type === selectedType;
-    const matchesSearch = !searchTerm || 
+    const matchesSearch =
+      !searchTerm ||
       log.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.notes?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      plants.find(p => p.id === log.plant_id)?.name?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDate = !dateFilter || 
+      plants
+        .find(p => p.id === log.plant_id)
+        ?.name?.toLowerCase()
+        .includes(searchTerm.toLowerCase());
+    const matchesDate =
+      !dateFilter ||
       format(parseISO(log.logged_at), 'yyyy-MM-dd') === dateFilter;
-    
+
     return matchesPlant && matchesType && matchesSearch && matchesDate;
   });
 
   if (loading) {
     return (
-      <div style={{
-        minHeight: '100vh',
-        background: 'var(--background)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <div style={{
-          padding: '2rem',
-          background: 'rgba(30, 41, 59, 0.6)',
-          borderRadius: '16px',
-          border: '1px solid rgba(100, 116, 139, 0.2)',
-          textAlign: 'center'
-        }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            border: '3px solid rgba(74, 222, 128, 0.3)',
-            borderTop: '3px solid #4ade80',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 1rem'
-          }}></div>
+      <div
+        style={{
+          minHeight: '100vh',
+          background: 'var(--background)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div
+          style={{
+            padding: '2rem',
+            background: 'rgba(30, 41, 59, 0.6)',
+            borderRadius: '16px',
+            border: '1px solid rgba(100, 116, 139, 0.2)',
+            textAlign: 'center',
+          }}
+        >
+          <div
+            style={{
+              width: '40px',
+              height: '40px',
+              border: '3px solid rgba(74, 222, 128, 0.3)',
+              borderTop: '3px solid #4ade80',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+              margin: '0 auto 1rem',
+            }}
+          ></div>
           <p style={{ color: '#f8fafc', margin: 0 }}>Loading logs...</p>
         </div>
       </div>
@@ -255,14 +303,16 @@ const Logs = () => {
   }
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'var(--background)',
-      padding: '2rem'
-    }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'var(--background)',
+        padding: '2rem',
+      }}
+    >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         {/* Header */}
-        <div 
+        <div
           style={{
             background: 'rgba(30, 41, 59, 0.6)',
             backdropFilter: 'blur(20px)',
@@ -274,20 +324,28 @@ const Logs = () => {
             boxShadow: '0 8px 20px -6px rgba(0, 0, 0, 0.3)',
             animation: 'fadeInUp 0.6s ease-out',
             transition: 'all 0.3s ease',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
-          onMouseEnter={(e) => {
+          onMouseEnter={(e: any) => {
             e.currentTarget.style.transform = 'translateY(-4px)';
             e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)';
             e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.3)';
           }}
-          onMouseLeave={(e) => {
+          onMouseLeave={(e: any) => {
             e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 8px 20px -6px rgba(0, 0, 0, 0.3)';
+            e.currentTarget.style.boxShadow =
+              '0 8px 20px -6px rgba(0, 0, 0, 0.3)';
             e.currentTarget.style.borderColor = 'rgba(100, 116, 139, 0.2)';
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '1rem',
+            }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <Link to="/dashboard" className="btn btn-secondary">
                 <ArrowLeft className="w-4 h-4" />
@@ -303,17 +361,19 @@ const Logs = () => {
               Add Log Entry
             </button>
           </div>
-          
+
           <div>
-            <h1 style={{ 
-              fontSize: '2rem', 
-              fontWeight: '700', 
-              color: '#f8fafc', 
-              marginBottom: '0.5rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem'
-            }}>
+            <h1
+              style={{
+                fontSize: '2rem',
+                fontWeight: '700',
+                color: '#f8fafc',
+                marginBottom: '0.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+              }}
+            >
               📋 Cultivation Logs
             </h1>
             <p style={{ color: '#94a3b8', fontSize: '1rem', margin: 0 }}>
@@ -324,7 +384,7 @@ const Logs = () => {
 
         {/* Add/Edit Form */}
         {showAddForm && (
-          <div 
+          <div
             style={{
               background: 'rgba(30, 41, 59, 0.6)',
               backdropFilter: 'blur(20px)',
@@ -336,29 +396,40 @@ const Logs = () => {
               boxShadow: '0 8px 20px -6px rgba(0, 0, 0, 0.3)',
               animation: 'fadeInUp 0.8s ease-out 0.2s both',
               transition: 'all 0.3s ease',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
-            onMouseEnter={(e) => {
+            onMouseEnter={(e: any) => {
               e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)';
+              e.currentTarget.style.boxShadow =
+                '0 20px 40px rgba(0, 0, 0, 0.3)';
               e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.3)';
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={(e: any) => {
               e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 8px 20px -6px rgba(0, 0, 0, 0.3)';
+              e.currentTarget.style.boxShadow =
+                '0 8px 20px -6px rgba(0, 0, 0, 0.3)';
               e.currentTarget.style.borderColor = 'rgba(100, 116, 139, 0.2)';
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-              <h2 style={{ 
-                fontSize: '1.5rem', 
-                fontWeight: '700', 
-                color: '#f8fafc', 
-                margin: 0,
+            <div
+              style={{
                 display: 'flex',
+                justifyContent: 'space-between',
                 alignItems: 'center',
-                gap: '0.5rem'
-              }}>
+                marginBottom: '2rem',
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#f8fafc',
+                  margin: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                }}
+              >
                 {editingLog ? '✏️ Edit Log Entry' : '➕ Add New Log Entry'}
               </h2>
               <button
@@ -370,13 +441,13 @@ const Logs = () => {
                   cursor: 'pointer',
                   padding: '0.5rem',
                   borderRadius: '8px',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.2s ease',
                 }}
-                onMouseEnter={(e) => {
+                onMouseEnter={(e: any) => {
                   e.currentTarget.style.background = 'rgba(100, 116, 139, 0.2)';
                   e.currentTarget.style.color = '#f8fafc';
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={(e: any) => {
                   e.currentTarget.style.background = 'transparent';
                   e.currentTarget.style.color = '#94a3b8';
                 }}
@@ -386,16 +457,25 @@ const Logs = () => {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                  gap: '1.5rem',
+                  marginBottom: '2rem',
+                }}
+              >
                 {/* Plant Selection */}
                 <div>
-                  <label style={{ 
-                    display: 'block', 
-                    color: '#e2e8f0', 
-                    fontSize: '0.875rem', 
-                    fontWeight: '600', 
-                    marginBottom: '0.5rem' 
-                  }}>
+                  <label
+                    style={{
+                      display: 'block',
+                      color: '#e2e8f0',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      marginBottom: '0.5rem',
+                    }}
+                  >
                     Plant *
                   </label>
                   <select
@@ -407,29 +487,45 @@ const Logs = () => {
                       borderRadius: '12px',
                       color: '#f8fafc',
                       fontSize: '0.875rem',
-                      outline: 'none'
+                      outline: 'none',
                     }}
-                    {...register('plant_id', { required: 'Please select a plant' })}
+                    {...register('plant_id', {
+                      required: 'Please select a plant',
+                    })}
                   >
                     <option value="">Select a plant...</option>
-                    {plants.filter(p => !p.archived).map(plant => (
-                      <option key={plant.id} value={plant.id}>
-                        {plant.name} ({plant.strain || 'Unknown strain'})
-                      </option>
-                    ))}
+                    {plants
+                      .filter(p => !p.archived)
+                      .map(plant => (
+                        <option key={plant.id} value={plant.id}>
+                          {plant.name} ({plant.strain || 'Unknown strain'})
+                        </option>
+                      ))}
                   </select>
-                  {errors.plant_id && <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{errors.plant_id.message}</p>}
+                  {errors.plant_id && (
+                    <p
+                      style={{
+                        color: '#ef4444',
+                        fontSize: '0.75rem',
+                        marginTop: '0.25rem',
+                      }}
+                    >
+                      {errors.plant_id.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Log Type */}
                 <div>
-                  <label style={{ 
-                    display: 'block', 
-                    color: '#e2e8f0', 
-                    fontSize: '0.875rem', 
-                    fontWeight: '600', 
-                    marginBottom: '0.5rem' 
-                  }}>
+                  <label
+                    style={{
+                      display: 'block',
+                      color: '#e2e8f0',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      marginBottom: '0.5rem',
+                    }}
+                  >
                     Activity Type *
                   </label>
                   <select
@@ -441,9 +537,11 @@ const Logs = () => {
                       borderRadius: '12px',
                       color: '#f8fafc',
                       fontSize: '0.875rem',
-                      outline: 'none'
+                      outline: 'none',
                     }}
-                    {...register('type', { required: 'Please select an activity type' })}
+                    {...register('type', {
+                      required: 'Please select an activity type',
+                    })}
                   >
                     <option value="">Select activity type...</option>
                     {logTypes.map(type => (
@@ -452,18 +550,30 @@ const Logs = () => {
                       </option>
                     ))}
                   </select>
-                  {errors.type && <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{errors.type.message}</p>}
+                  {errors.type && (
+                    <p
+                      style={{
+                        color: '#ef4444',
+                        fontSize: '0.75rem',
+                        marginTop: '0.25rem',
+                      }}
+                    >
+                      {errors.type.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Date/Time */}
                 <div>
-                  <label style={{ 
-                    display: 'block', 
-                    color: '#e2e8f0', 
-                    fontSize: '0.875rem', 
-                    fontWeight: '600', 
-                    marginBottom: '0.5rem' 
-                  }}>
+                  <label
+                    style={{
+                      display: 'block',
+                      color: '#e2e8f0',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      marginBottom: '0.5rem',
+                    }}
+                  >
                     Date & Time
                   </label>
                   <input
@@ -476,7 +586,7 @@ const Logs = () => {
                       borderRadius: '12px',
                       color: '#f8fafc',
                       fontSize: '0.875rem',
-                      outline: 'none'
+                      outline: 'none',
                     }}
                     {...register('logged_at')}
                     defaultValue={format(new Date(), "yyyy-MM-dd'T'HH:mm")}
@@ -485,13 +595,15 @@ const Logs = () => {
 
                 {/* Description */}
                 <div style={{ gridColumn: '1 / -1' }}>
-                  <label style={{ 
-                    display: 'block', 
-                    color: '#e2e8f0', 
-                    fontSize: '0.875rem', 
-                    fontWeight: '600', 
-                    marginBottom: '0.5rem' 
-                  }}>
+                  <label
+                    style={{
+                      display: 'block',
+                      color: '#e2e8f0',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      marginBottom: '0.5rem',
+                    }}
+                  >
                     Description
                   </label>
                   <input
@@ -504,7 +616,7 @@ const Logs = () => {
                       borderRadius: '12px',
                       color: '#f8fafc',
                       fontSize: '0.875rem',
-                      outline: 'none'
+                      outline: 'none',
                     }}
                     {...register('description')}
                     placeholder="Brief description of the activity..."
@@ -515,29 +627,40 @@ const Logs = () => {
               {/* Dynamic Fields Based on Type */}
               {selectedTypeConfig && selectedTypeConfig.fields.length > 0 && (
                 <div style={{ marginBottom: '2rem' }}>
-                  <h3 style={{ 
-                    color: '#f8fafc', 
-                    fontSize: '1.125rem', 
-                    fontWeight: '600', 
-                    marginBottom: '1rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem'
-                  }}>
+                  <h3
+                    style={{
+                      color: '#f8fafc',
+                      fontSize: '1.125rem',
+                      fontWeight: '600',
+                      marginBottom: '1rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                    }}
+                  >
                     {selectedTypeConfig.icon}
                     {selectedTypeConfig.label} Details
                   </h3>
-                  
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
+
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns:
+                        'repeat(auto-fit, minmax(250px, 1fr))',
+                      gap: '1.5rem',
+                    }}
+                  >
                     {selectedTypeConfig.fields.includes('water_amount') && (
                       <div>
-                        <label style={{ 
-                          display: 'block', 
-                          color: '#e2e8f0', 
-                          fontSize: '0.875rem', 
-                          fontWeight: '600', 
-                          marginBottom: '0.5rem' 
-                        }}>
+                        <label
+                          style={{
+                            display: 'block',
+                            color: '#e2e8f0',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            marginBottom: '0.5rem',
+                          }}
+                        >
                           Water Amount (L)
                         </label>
                         <input
@@ -551,7 +674,7 @@ const Logs = () => {
                             borderRadius: '12px',
                             color: '#f8fafc',
                             fontSize: '0.875rem',
-                            outline: 'none'
+                            outline: 'none',
                           }}
                           {...register('water_amount')}
                           placeholder="0.0"
@@ -561,13 +684,15 @@ const Logs = () => {
 
                     {selectedTypeConfig.fields.includes('ph_level') && (
                       <div>
-                        <label style={{ 
-                          display: 'block', 
-                          color: '#e2e8f0', 
-                          fontSize: '0.875rem', 
-                          fontWeight: '600', 
-                          marginBottom: '0.5rem' 
-                        }}>
+                        <label
+                          style={{
+                            display: 'block',
+                            color: '#e2e8f0',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            marginBottom: '0.5rem',
+                          }}
+                        >
                           pH Level
                         </label>
                         <input
@@ -583,7 +708,7 @@ const Logs = () => {
                             borderRadius: '12px',
                             color: '#f8fafc',
                             fontSize: '0.875rem',
-                            outline: 'none'
+                            outline: 'none',
                           }}
                           {...register('ph_level')}
                           placeholder="6.0"
@@ -593,13 +718,15 @@ const Logs = () => {
 
                     {selectedTypeConfig.fields.includes('ec_tds') && (
                       <div>
-                        <label style={{ 
-                          display: 'block', 
-                          color: '#e2e8f0', 
-                          fontSize: '0.875rem', 
-                          fontWeight: '600', 
-                          marginBottom: '0.5rem' 
-                        }}>
+                        <label
+                          style={{
+                            display: 'block',
+                            color: '#e2e8f0',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            marginBottom: '0.5rem',
+                          }}
+                        >
                           EC/TDS (ppm)
                         </label>
                         <input
@@ -613,7 +740,7 @@ const Logs = () => {
                             borderRadius: '12px',
                             color: '#f8fafc',
                             fontSize: '0.875rem',
-                            outline: 'none'
+                            outline: 'none',
                           }}
                           {...register('ec_tds')}
                           placeholder="800"
@@ -623,13 +750,15 @@ const Logs = () => {
 
                     {selectedTypeConfig.fields.includes('temperature') && (
                       <div>
-                        <label style={{ 
-                          display: 'block', 
-                          color: '#e2e8f0', 
-                          fontSize: '0.875rem', 
-                          fontWeight: '600', 
-                          marginBottom: '0.5rem' 
-                        }}>
+                        <label
+                          style={{
+                            display: 'block',
+                            color: '#e2e8f0',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            marginBottom: '0.5rem',
+                          }}
+                        >
                           Temperature (°C)
                         </label>
                         <input
@@ -643,7 +772,7 @@ const Logs = () => {
                             borderRadius: '12px',
                             color: '#f8fafc',
                             fontSize: '0.875rem',
-                            outline: 'none'
+                            outline: 'none',
                           }}
                           {...register('temperature')}
                           placeholder="24.0"
@@ -653,13 +782,15 @@ const Logs = () => {
 
                     {selectedTypeConfig.fields.includes('humidity') && (
                       <div>
-                        <label style={{ 
-                          display: 'block', 
-                          color: '#e2e8f0', 
-                          fontSize: '0.875rem', 
-                          fontWeight: '600', 
-                          marginBottom: '0.5rem' 
-                        }}>
+                        <label
+                          style={{
+                            display: 'block',
+                            color: '#e2e8f0',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            marginBottom: '0.5rem',
+                          }}
+                        >
                           Humidity (%)
                         </label>
                         <input
@@ -675,7 +806,7 @@ const Logs = () => {
                             borderRadius: '12px',
                             color: '#f8fafc',
                             fontSize: '0.875rem',
-                            outline: 'none'
+                            outline: 'none',
                           }}
                           {...register('humidity')}
                           placeholder="60"
@@ -685,13 +816,15 @@ const Logs = () => {
 
                     {selectedTypeConfig.fields.includes('light_intensity') && (
                       <div>
-                        <label style={{ 
-                          display: 'block', 
-                          color: '#e2e8f0', 
-                          fontSize: '0.875rem', 
-                          fontWeight: '600', 
-                          marginBottom: '0.5rem' 
-                        }}>
+                        <label
+                          style={{
+                            display: 'block',
+                            color: '#e2e8f0',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            marginBottom: '0.5rem',
+                          }}
+                        >
                           Light Intensity (PPFD)
                         </label>
                         <input
@@ -705,7 +838,7 @@ const Logs = () => {
                             borderRadius: '12px',
                             color: '#f8fafc',
                             fontSize: '0.875rem',
-                            outline: 'none'
+                            outline: 'none',
                           }}
                           {...register('light_intensity')}
                           placeholder="800"
@@ -715,13 +848,15 @@ const Logs = () => {
 
                     {selectedTypeConfig.fields.includes('co2_level') && (
                       <div>
-                        <label style={{ 
-                          display: 'block', 
-                          color: '#e2e8f0', 
-                          fontSize: '0.875rem', 
-                          fontWeight: '600', 
-                          marginBottom: '0.5rem' 
-                        }}>
+                        <label
+                          style={{
+                            display: 'block',
+                            color: '#e2e8f0',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            marginBottom: '0.5rem',
+                          }}
+                        >
                           CO2 Level (ppm)
                         </label>
                         <input
@@ -735,7 +870,7 @@ const Logs = () => {
                             borderRadius: '12px',
                             color: '#f8fafc',
                             fontSize: '0.875rem',
-                            outline: 'none'
+                            outline: 'none',
                           }}
                           {...register('co2_level')}
                           placeholder="1200"
@@ -745,13 +880,15 @@ const Logs = () => {
 
                     {selectedTypeConfig.fields.includes('height_cm') && (
                       <div>
-                        <label style={{ 
-                          display: 'block', 
-                          color: '#e2e8f0', 
-                          fontSize: '0.875rem', 
-                          fontWeight: '600', 
-                          marginBottom: '0.5rem' 
-                        }}>
+                        <label
+                          style={{
+                            display: 'block',
+                            color: '#e2e8f0',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            marginBottom: '0.5rem',
+                          }}
+                        >
                           Plant Height (cm)
                         </label>
                         <input
@@ -765,7 +902,7 @@ const Logs = () => {
                             borderRadius: '12px',
                             color: '#f8fafc',
                             fontSize: '0.875rem',
-                            outline: 'none'
+                            outline: 'none',
                           }}
                           {...register('height_cm')}
                           placeholder="25.0"
@@ -775,13 +912,15 @@ const Logs = () => {
 
                     {selectedTypeConfig.fields.includes('nutrient_info') && (
                       <div style={{ gridColumn: '1 / -1' }}>
-                        <label style={{ 
-                          display: 'block', 
-                          color: '#e2e8f0', 
-                          fontSize: '0.875rem', 
-                          fontWeight: '600', 
-                          marginBottom: '0.5rem' 
-                        }}>
+                        <label
+                          style={{
+                            display: 'block',
+                            color: '#e2e8f0',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            marginBottom: '0.5rem',
+                          }}
+                        >
                           Nutrient Information
                         </label>
                         <input
@@ -794,7 +933,7 @@ const Logs = () => {
                             borderRadius: '12px',
                             color: '#f8fafc',
                             fontSize: '0.875rem',
-                            outline: 'none'
+                            outline: 'none',
                           }}
                           {...register('nutrient_info')}
                           placeholder="e.g., NPK 10-5-14, Cal-Mag 2ml/L"
@@ -804,13 +943,15 @@ const Logs = () => {
 
                     {selectedTypeConfig.fields.includes('notes') && (
                       <div style={{ gridColumn: '1 / -1' }}>
-                        <label style={{ 
-                          display: 'block', 
-                          color: '#e2e8f0', 
-                          fontSize: '0.875rem', 
-                          fontWeight: '600', 
-                          marginBottom: '0.5rem' 
-                        }}>
+                        <label
+                          style={{
+                            display: 'block',
+                            color: '#e2e8f0',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            marginBottom: '0.5rem',
+                          }}
+                        >
                           Notes
                         </label>
                         <textarea
@@ -825,7 +966,7 @@ const Logs = () => {
                             fontSize: '0.875rem',
                             outline: 'none',
                             resize: 'vertical',
-                            minHeight: '100px'
+                            minHeight: '100px',
                           }}
                           {...register('notes')}
                           placeholder="Additional observations, thoughts, or details..."
@@ -837,7 +978,13 @@ const Logs = () => {
               )}
 
               {/* Form Actions */}
-              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '1rem',
+                  justifyContent: 'flex-end',
+                }}
+              >
                 <button
                   type="button"
                   onClick={handleCancel}
@@ -850,7 +997,7 @@ const Logs = () => {
                     fontSize: '0.875rem',
                     fontWeight: '600',
                     cursor: 'pointer',
-                    transition: 'all 0.2s ease'
+                    transition: 'all 0.2s ease',
                   }}
                 >
                   Cancel
@@ -871,11 +1018,15 @@ const Logs = () => {
                     transition: 'all 0.2s ease',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.5rem'
+                    gap: '0.5rem',
                   }}
                 >
                   <Save className="w-4 h-4" />
-                  {isSubmitting ? 'Saving...' : (editingLog ? 'Update Log' : 'Save Log')}
+                  {isSubmitting
+                    ? 'Saving...'
+                    : editingLog
+                      ? 'Update Log'
+                      : 'Save Log'}
                 </button>
               </div>
             </form>
@@ -883,7 +1034,7 @@ const Logs = () => {
         )}
 
         {/* Filters */}
-        <div 
+        <div
           style={{
             background: 'rgba(30, 41, 59, 0.6)',
             backdropFilter: 'blur(20px)',
@@ -895,44 +1046,56 @@ const Logs = () => {
             boxShadow: '0 8px 20px -6px rgba(0, 0, 0, 0.3)',
             animation: 'fadeInUp 0.8s ease-out 0.4s both',
             transition: 'all 0.3s ease',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
-          onMouseEnter={(e) => {
+          onMouseEnter={(e: any) => {
             e.currentTarget.style.transform = 'translateY(-4px)';
             e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)';
             e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.3)';
           }}
-          onMouseLeave={(e) => {
+          onMouseLeave={(e: any) => {
             e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 8px 20px -6px rgba(0, 0, 0, 0.3)';
+            e.currentTarget.style.boxShadow =
+              '0 8px 20px -6px rgba(0, 0, 0, 0.3)';
             e.currentTarget.style.borderColor = 'rgba(100, 116, 139, 0.2)';
           }}
         >
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '1rem',
+            }}
+          >
             <div>
-              <label style={{ 
-                display: 'block', 
-                color: '#e2e8f0', 
-                fontSize: '0.75rem', 
-                fontWeight: '600', 
-                marginBottom: '0.5rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em'
-              }}>
+              <label
+                style={{
+                  display: 'block',
+                  color: '#e2e8f0',
+                  fontSize: '0.75rem',
+                  fontWeight: '600',
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
+              >
                 Search Logs
               </label>
               <div style={{ position: 'relative' }}>
-                <Search className="w-4 h-4" style={{ 
-                  position: 'absolute', 
-                  left: '1rem', 
-                  top: '50%', 
-                  transform: 'translateY(-50%)', 
-                  color: '#94a3b8' 
-                }} />
+                <Search
+                  className="w-4 h-4"
+                  style={{
+                    position: 'absolute',
+                    left: '1rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: '#94a3b8',
+                  }}
+                />
                 <input
                   type="text"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e: any) => setSearchTerm(e.target.value)}
                   placeholder="Search descriptions, notes..."
                   style={{
                     width: '100%',
@@ -942,27 +1105,29 @@ const Logs = () => {
                     borderRadius: '12px',
                     color: '#f8fafc',
                     fontSize: '0.875rem',
-                    outline: 'none'
+                    outline: 'none',
                   }}
                 />
               </div>
             </div>
 
             <div>
-              <label style={{ 
-                display: 'block', 
-                color: '#e2e8f0', 
-                fontSize: '0.75rem', 
-                fontWeight: '600', 
-                marginBottom: '0.5rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em'
-              }}>
+              <label
+                style={{
+                  display: 'block',
+                  color: '#e2e8f0',
+                  fontSize: '0.75rem',
+                  fontWeight: '600',
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
+              >
                 Filter by Plant
               </label>
               <select
                 value={selectedPlant}
-                onChange={(e) => setSelectedPlant(e.target.value)}
+                onChange={(e: any) => setSelectedPlant(e.target.value)}
                 style={{
                   width: '100%',
                   padding: '0.75rem 1rem',
@@ -971,33 +1136,37 @@ const Logs = () => {
                   borderRadius: '12px',
                   color: '#f8fafc',
                   fontSize: '0.875rem',
-                  outline: 'none'
+                  outline: 'none',
                 }}
               >
                 <option value="">All plants</option>
-                {plants.filter(p => !p.archived).map(plant => (
-                  <option key={plant.id} value={plant.id}>
-                    {plant.name}
-                  </option>
-                ))}
+                {plants
+                  .filter(p => !p.archived)
+                  .map(plant => (
+                    <option key={plant.id} value={plant.id}>
+                      {plant.name}
+                    </option>
+                  ))}
               </select>
             </div>
 
             <div>
-              <label style={{ 
-                display: 'block', 
-                color: '#e2e8f0', 
-                fontSize: '0.75rem', 
-                fontWeight: '600', 
-                marginBottom: '0.5rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em'
-              }}>
+              <label
+                style={{
+                  display: 'block',
+                  color: '#e2e8f0',
+                  fontSize: '0.75rem',
+                  fontWeight: '600',
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
+              >
                 Filter by Type
               </label>
               <select
                 value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
+                onChange={(e: any) => setSelectedType(e.target.value)}
                 style={{
                   width: '100%',
                   padding: '0.75rem 1rem',
@@ -1006,7 +1175,7 @@ const Logs = () => {
                   borderRadius: '12px',
                   color: '#f8fafc',
                   fontSize: '0.875rem',
-                  outline: 'none'
+                  outline: 'none',
                 }}
               >
                 <option value="">All types</option>
@@ -1019,21 +1188,23 @@ const Logs = () => {
             </div>
 
             <div>
-              <label style={{ 
-                display: 'block', 
-                color: '#e2e8f0', 
-                fontSize: '0.75rem', 
-                fontWeight: '600', 
-                marginBottom: '0.5rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em'
-              }}>
+              <label
+                style={{
+                  display: 'block',
+                  color: '#e2e8f0',
+                  fontSize: '0.75rem',
+                  fontWeight: '600',
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
+              >
                 Filter by Date
               </label>
               <input
                 type="date"
                 value={dateFilter}
-                onChange={(e) => setDateFilter(e.target.value)}
+                onChange={(e: any) => setDateFilter(e.target.value)}
                 style={{
                   width: '100%',
                   padding: '0.75rem 1rem',
@@ -1042,14 +1213,21 @@ const Logs = () => {
                   borderRadius: '12px',
                   color: '#f8fafc',
                   fontSize: '0.875rem',
-                  outline: 'none'
+                  outline: 'none',
                 }}
               />
             </div>
           </div>
 
           {(searchTerm || selectedPlant || selectedType || dateFilter) && (
-            <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div
+              style={{
+                marginTop: '1rem',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
               <p style={{ color: '#94a3b8', fontSize: '0.875rem', margin: 0 }}>
                 Showing {filteredLogs.length} of {logs.length} logs
               </p>
@@ -1069,7 +1247,7 @@ const Logs = () => {
                   fontSize: '0.75rem',
                   fontWeight: '600',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.2s ease',
                 }}
               >
                 Clear Filters
@@ -1079,7 +1257,7 @@ const Logs = () => {
         </div>
 
         {/* Logs Table */}
-        <div 
+        <div
           style={{
             background: 'rgba(30, 41, 59, 0.6)',
             backdropFilter: 'blur(20px)',
@@ -1090,58 +1268,65 @@ const Logs = () => {
             boxShadow: '0 8px 20px -6px rgba(0, 0, 0, 0.3)',
             animation: 'fadeInUp 0.8s ease-out 0.6s both',
             transition: 'all 0.3s ease',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
-          onMouseEnter={(e) => {
+          onMouseEnter={(e: any) => {
             e.currentTarget.style.transform = 'translateY(-4px)';
             e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)';
             e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.3)';
           }}
-          onMouseLeave={(e) => {
+          onMouseLeave={(e: any) => {
             e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 8px 20px -6px rgba(0, 0, 0, 0.3)';
+            e.currentTarget.style.boxShadow =
+              '0 8px 20px -6px rgba(0, 0, 0, 0.3)';
             e.currentTarget.style.borderColor = 'rgba(100, 116, 139, 0.2)';
           }}
         >
           {filteredLogs.length === 0 ? (
-            <div style={{ 
-              textAlign: 'center', 
-              padding: '4rem 2rem',
-              background: 'rgba(15, 23, 42, 0.4)'
-            }}>
-              <div style={{
-                width: '80px',
-                height: '80px',
-                background: 'linear-gradient(135deg, #22c55e, #16a34a)',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 1.5rem',
-                opacity: 0.8
-              }}>
+            <div
+              style={{
+                textAlign: 'center',
+                padding: '4rem 2rem',
+                background: 'rgba(15, 23, 42, 0.4)',
+              }}
+            >
+              <div
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.5rem',
+                  opacity: 0.8,
+                }}
+              >
                 <Activity className="w-10 h-10" style={{ color: 'white' }} />
               </div>
-              <h3 style={{ 
-                color: '#f8fafc', 
-                fontSize: '1.25rem', 
-                fontWeight: '600', 
-                marginBottom: '0.75rem'
-              }}>
-                {searchTerm || selectedPlant || selectedType || dateFilter 
-                  ? 'No logs match your filters' 
-                  : 'No logs yet'
-                }
+              <h3
+                style={{
+                  color: '#f8fafc',
+                  fontSize: '1.25rem',
+                  fontWeight: '600',
+                  marginBottom: '0.75rem',
+                }}
+              >
+                {searchTerm || selectedPlant || selectedType || dateFilter
+                  ? 'No logs match your filters'
+                  : 'No logs yet'}
               </h3>
-              <p style={{ 
-                color: '#94a3b8', 
-                marginBottom: '2rem',
-                fontSize: '0.95rem'
-              }}>
-                {searchTerm || selectedPlant || selectedType || dateFilter 
+              <p
+                style={{
+                  color: '#94a3b8',
+                  marginBottom: '2rem',
+                  fontSize: '0.95rem',
+                }}
+              >
+                {searchTerm || selectedPlant || selectedType || dateFilter
                   ? 'Try adjusting your search criteria or filters.'
-                  : 'Start tracking your cultivation activities by adding your first log entry.'
-                }
+                  : 'Start tracking your cultivation activities by adding your first log entry.'}
               </p>
               {!(searchTerm || selectedPlant || selectedType || dateFilter) && (
                 <button
@@ -1158,7 +1343,7 @@ const Logs = () => {
                     fontSize: '0.875rem',
                     fontWeight: '600',
                     cursor: 'pointer',
-                    transition: 'all 0.2s ease'
+                    transition: 'all 0.2s ease',
                   }}
                 >
                   <Plus className="w-4 h-4" />
@@ -1168,106 +1353,176 @@ const Logs = () => {
             </div>
           ) : (
             <div style={{ overflowX: 'auto', minWidth: '100%' }}>
-              <table style={{ width: '100%', fontSize: '0.875rem', textAlign: 'left', borderCollapse: 'collapse', minWidth: '900px' }}>
+              <table
+                style={{
+                  width: '100%',
+                  fontSize: '0.875rem',
+                  textAlign: 'left',
+                  borderCollapse: 'collapse',
+                  minWidth: '900px',
+                }}
+              >
                 <thead>
-                  <tr style={{ 
-                    background: 'rgba(15, 23, 42, 0.8)', 
-                    borderBottom: '1px solid rgba(100, 116, 139, 0.3)' 
-                  }}>
-                    <th style={{ 
-                      padding: '1rem 1.25rem', 
-                      fontWeight: '600', 
-                      color: '#e2e8f0',
-                      fontSize: '0.8rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      textAlign: 'left',
-                      width: '15%'
-                    }}>Date/Time</th>
-                    <th style={{ 
-                      padding: '1rem 1.25rem', 
-                      fontWeight: '600', 
-                      color: '#e2e8f0',
-                      fontSize: '0.8rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      textAlign: 'left',
-                      width: '15%'
-                    }}>Plant</th>
-                    <th style={{ 
-                      padding: '1rem 1.25rem', 
-                      fontWeight: '600', 
-                      color: '#e2e8f0',
-                      fontSize: '0.8rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      textAlign: 'center',
-                      width: '12%'
-                    }}>Type</th>
-                    <th style={{ 
-                      padding: '1rem 1.25rem', 
-                      fontWeight: '600', 
-                      color: '#e2e8f0',
-                      fontSize: '0.8rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      textAlign: 'left',
-                      width: '20%'
-                    }}>Description</th>
-                    <th style={{ 
-                      padding: '1rem 1.25rem', 
-                      fontWeight: '600', 
-                      color: '#e2e8f0',
-                      fontSize: '0.8rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      textAlign: 'left',
-                      width: '25%'
-                    }}>Notes</th>
-                    <th style={{ 
-                      padding: '1rem 1.25rem', 
-                      fontWeight: '600', 
-                      color: '#e2e8f0',
-                      fontSize: '0.8rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      textAlign: 'center',
-                      width: '13%'
-                    }}>Actions</th>
+                  <tr
+                    style={{
+                      background: 'rgba(15, 23, 42, 0.8)',
+                      borderBottom: '1px solid rgba(100, 116, 139, 0.3)',
+                    }}
+                  >
+                    <th
+                      style={{
+                        padding: '1rem 1.25rem',
+                        fontWeight: '600',
+                        color: '#e2e8f0',
+                        fontSize: '0.8rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        textAlign: 'left',
+                        width: '15%',
+                      }}
+                    >
+                      Date/Time
+                    </th>
+                    <th
+                      style={{
+                        padding: '1rem 1.25rem',
+                        fontWeight: '600',
+                        color: '#e2e8f0',
+                        fontSize: '0.8rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        textAlign: 'left',
+                        width: '15%',
+                      }}
+                    >
+                      Plant
+                    </th>
+                    <th
+                      style={{
+                        padding: '1rem 1.25rem',
+                        fontWeight: '600',
+                        color: '#e2e8f0',
+                        fontSize: '0.8rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        textAlign: 'center',
+                        width: '12%',
+                      }}
+                    >
+                      Type
+                    </th>
+                    <th
+                      style={{
+                        padding: '1rem 1.25rem',
+                        fontWeight: '600',
+                        color: '#e2e8f0',
+                        fontSize: '0.8rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        textAlign: 'left',
+                        width: '20%',
+                      }}
+                    >
+                      Description
+                    </th>
+                    <th
+                      style={{
+                        padding: '1rem 1.25rem',
+                        fontWeight: '600',
+                        color: '#e2e8f0',
+                        fontSize: '0.8rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        textAlign: 'left',
+                        width: '25%',
+                      }}
+                    >
+                      Notes
+                    </th>
+                    <th
+                      style={{
+                        padding: '1rem 1.25rem',
+                        fontWeight: '600',
+                        color: '#e2e8f0',
+                        fontSize: '0.8rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        textAlign: 'center',
+                        width: '13%',
+                      }}
+                    >
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredLogs.map((log, index) => {
                     const plant = plants.find(p => p.id === log.plant_id);
                     const typeConfig = getLogTypeConfig(log.type);
-                    
+
                     return (
-                      <tr 
-                        key={log.id} 
-                        style={{ 
-                          borderBottom: index < filteredLogs.length - 1 ? '1px solid rgba(100, 116, 139, 0.2)' : 'none',
+                      <tr
+                        key={log.id}
+                        style={{
+                          borderBottom:
+                            index < filteredLogs.length - 1
+                              ? '1px solid rgba(100, 116, 139, 0.2)'
+                              : 'none',
                           transition: 'all 0.2s ease',
-                          background: index % 2 === 0 ? 'rgba(15, 23, 42, 0.3)' : 'transparent'
+                          background:
+                            index % 2 === 0
+                              ? 'rgba(15, 23, 42, 0.3)'
+                              : 'transparent',
                         }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = 'rgba(30, 41, 59, 0.7)';
+                        onMouseEnter={(e: any) => {
+                          e.currentTarget.style.background =
+                            'rgba(30, 41, 59, 0.7)';
                         }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = index % 2 === 0 ? 'rgba(15, 23, 42, 0.3)' : 'transparent';
+                        onMouseLeave={(e: any) => {
+                          e.currentTarget.style.background =
+                            index % 2 === 0
+                              ? 'rgba(15, 23, 42, 0.3)'
+                              : 'transparent';
                         }}
                       >
-                        <td style={{ padding: '1rem 1.25rem', whiteSpace: 'nowrap', textAlign: 'left' }}>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.125rem' }}>
-                            <span style={{ color: '#f8fafc', fontWeight: '600', fontSize: '0.875rem' }}>
+                        <td
+                          style={{
+                            padding: '1rem 1.25rem',
+                            whiteSpace: 'nowrap',
+                            textAlign: 'left',
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: '0.125rem',
+                            }}
+                          >
+                            <span
+                              style={{
+                                color: '#f8fafc',
+                                fontWeight: '600',
+                                fontSize: '0.875rem',
+                              }}
+                            >
                               {format(parseISO(log.logged_at), 'MMM dd, yyyy')}
                             </span>
-                            <span style={{ color: '#94a3b8', fontSize: '0.75rem', fontWeight: '500' }}>
+                            <span
+                              style={{
+                                color: '#94a3b8',
+                                fontSize: '0.75rem',
+                                fontWeight: '500',
+                              }}
+                            >
                               {format(parseISO(log.logged_at), 'HH:mm:ss')}
                             </span>
                           </div>
                         </td>
-                        
-                        <td style={{ padding: '1rem 1.25rem', textAlign: 'left' }}>
+
+                        <td
+                          style={{ padding: '1rem 1.25rem', textAlign: 'left' }}
+                        >
                           <Link
                             to={`/plants/${plant?.id}`}
                             style={{
@@ -1276,78 +1531,103 @@ const Logs = () => {
                               fontWeight: '600',
                               fontSize: '0.875rem',
                               display: 'block',
-                              marginBottom: '0.25rem'
+                              marginBottom: '0.25rem',
                             }}
                           >
                             {plant?.name || 'Unknown Plant'}
                           </Link>
                           {plant?.strain && (
-                            <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>
+                            <span
+                              style={{ color: '#94a3b8', fontSize: '0.75rem' }}
+                            >
                               {plant.strain}
                             </span>
                           )}
                         </td>
-                        
-                        <td style={{ 
-                          padding: '1rem 1.25rem', 
-                          whiteSpace: 'nowrap', 
-                          textAlign: 'center',
-                          verticalAlign: 'middle'
-                        }}>
-                          <span style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            padding: '0.375rem 0.75rem',
-                            borderRadius: '100px',
-                            fontSize: '0.75rem',
-                            fontWeight: '600',
-                            background: `${typeConfig.color}20`,
-                            color: typeConfig.color,
-                            border: `1px solid ${typeConfig.color}40`,
-                            gap: '0.375rem',
-                            textTransform: 'capitalize',
-                            letterSpacing: '0.015em',
+
+                        <td
+                          style={{
+                            padding: '1rem 1.25rem',
                             whiteSpace: 'nowrap',
-                            minWidth: 'fit-content'
-                          }}>
+                            textAlign: 'center',
+                            verticalAlign: 'middle',
+                          }}
+                        >
+                          <span
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              padding: '0.375rem 0.75rem',
+                              borderRadius: '100px',
+                              fontSize: '0.75rem',
+                              fontWeight: '600',
+                              background: `${typeConfig.color}20`,
+                              color: typeConfig.color,
+                              border: `1px solid ${typeConfig.color}40`,
+                              gap: '0.375rem',
+                              textTransform: 'capitalize',
+                              letterSpacing: '0.015em',
+                              whiteSpace: 'nowrap',
+                              minWidth: 'fit-content',
+                            }}
+                          >
                             {typeConfig.icon}
                             {typeConfig.label}
                           </span>
                         </td>
-                        
-                        <td style={{ padding: '1rem 1.25rem', textAlign: 'left' }}>
-                          <span style={{ 
-                            color: '#f8fafc', 
-                            fontWeight: '500',
-                            fontSize: '0.875rem',
-                            lineHeight: '1.4',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden'
-                          }}>
+
+                        <td
+                          style={{ padding: '1rem 1.25rem', textAlign: 'left' }}
+                        >
+                          <span
+                            style={{
+                              color: '#f8fafc',
+                              fontWeight: '500',
+                              fontSize: '0.875rem',
+                              lineHeight: '1.4',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                            }}
+                          >
                             {log.description || 'No description provided'}
                           </span>
                         </td>
-                        
-                        <td style={{ padding: '1rem 1.25rem', textAlign: 'left' }}>
-                          <span style={{ 
-                            color: '#cbd5e1', 
-                            fontWeight: '400',
-                            fontSize: '0.875rem',
-                            lineHeight: '1.4',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 3,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden'
-                          }}>
+
+                        <td
+                          style={{ padding: '1rem 1.25rem', textAlign: 'left' }}
+                        >
+                          <span
+                            style={{
+                              color: '#cbd5e1',
+                              fontWeight: '400',
+                              fontSize: '0.875rem',
+                              lineHeight: '1.4',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 3,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                            }}
+                          >
                             {log.notes || 'No notes provided'}
                           </span>
                         </td>
-                        
-                        <td style={{ padding: '1rem 1.25rem', textAlign: 'center' }}>
-                          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
+
+                        <td
+                          style={{
+                            padding: '1rem 1.25rem',
+                            textAlign: 'center',
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              gap: '0.5rem',
+                            }}
+                          >
                             <button
                               onClick={() => {
                                 setEditingLog(log);
@@ -1364,13 +1644,15 @@ const Logs = () => {
                                 borderRadius: '8px',
                                 border: '1px solid rgba(59, 130, 246, 0.2)',
                                 cursor: 'pointer',
-                                transition: 'all 0.2s ease'
+                                transition: 'all 0.2s ease',
                               }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'rgba(59, 130, 246, 0.2)';
+                              onMouseEnter={(e: any) => {
+                                e.currentTarget.style.background =
+                                  'rgba(59, 130, 246, 0.2)';
                               }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'rgba(59, 130, 246, 0.1)';
+                              onMouseLeave={(e: any) => {
+                                e.currentTarget.style.background =
+                                  'rgba(59, 130, 246, 0.1)';
                               }}
                             >
                               <Edit className="w-4 h-4" />
@@ -1387,13 +1669,15 @@ const Logs = () => {
                                 borderRadius: '8px',
                                 border: '1px solid rgba(239, 68, 68, 0.2)',
                                 cursor: 'pointer',
-                                transition: 'all 0.2s ease'
+                                transition: 'all 0.2s ease',
                               }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)';
+                              onMouseEnter={(e: any) => {
+                                e.currentTarget.style.background =
+                                  'rgba(239, 68, 68, 0.2)';
                               }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
+                              onMouseLeave={(e: any) => {
+                                e.currentTarget.style.background =
+                                  'rgba(239, 68, 68, 0.1)';
                               }}
                             >
                               <Trash2 className="w-4 h-4" />
